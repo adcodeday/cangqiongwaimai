@@ -1,0 +1,24 @@
+package com.Lu.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+@Configuration
+@Slf4j
+public class RedisConfiguration{
+    @Bean
+    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory){
+        log.info("redisTemplate配置类开始加载");
+        RedisTemplate redisTemplate=new RedisTemplate();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        return redisTemplate;
+    }
+
+}

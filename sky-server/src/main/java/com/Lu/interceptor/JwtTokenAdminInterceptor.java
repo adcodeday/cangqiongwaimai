@@ -1,6 +1,7 @@
 package com.Lu.interceptor;
 
 import com.Lu.constant.JwtClaimsConstant;
+import com.Lu.context.BaseContext;
 import com.Lu.properties.JwtProperties;
 import com.Lu.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -42,17 +43,25 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         String token = request.getHeader(jwtProperties.getAdminTokenName());
 
         //2、校验令牌
+
         try {
             log.info("jwt校验:{}", token);
+            //效验令牌，并根据令牌获取到claims，claims里包含id属性
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
+            //从claims里获得到id
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
             log.info("当前员工id：", empId);
+            //使用把id放到threadlocal中
+            BaseContext.setCurrentId(empId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码
             response.setStatus(401);
-            return false;
+            //这时显示401状态码，代表需要重新登陆
+            //TODO：测试，返回true，记得改回来
+            BaseContext.setCurrentId(0L);
+            return true;
         }
     }
 }

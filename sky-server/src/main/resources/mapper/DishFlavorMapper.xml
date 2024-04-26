@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.Lu.mapper.DishFlavorMapper">
+    <resultMap id="id" type="com.Lu.dto.DishDTO">
+        <result column="dish_id" property="id"/>
+    </resultMap>
+    <insert id="addDish" >
+        insert into dish_flavor(dish_id,name,value) values
+        <foreach collection="list" item="fl" separator=",">
+            (#{fl.dishId},#{fl.name},#{fl.value})
+        </foreach>
+    </insert>
+    <update id="updateDish">
+        <foreach collection="list" item="fl" separator=";" >
+            update dish_flavor set name=#{fl.name},value=#{value} where dish_id=#{fl.dishId}
+        </foreach>
+    </update>
+    <select id="selectByDishId" resultType="com.Lu.entity.DishFlavor">
+        select * from dish_flavor where dish_id=#{dish_id}
+    </select>
+</mapper>
