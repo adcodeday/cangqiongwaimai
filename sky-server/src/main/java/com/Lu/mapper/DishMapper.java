@@ -9,6 +9,7 @@ import com.Lu.enumeration.OperationType;
 import com.Lu.vo.DishVO;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -23,4 +24,9 @@ public interface DishMapper {
     DishVO selectOne(Dish dish);
 
     void deleteDishes(List<Long> ids);
+    List<DishVO> list(Dish dish);
+    @Select("select * from dish d where d.id in " +
+            "(select dish_id from setmeal_dish where setmeal_id=#{id})"
+    )
+    List<Dish> getBySetmealId(Long id);
 }

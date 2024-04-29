@@ -17,7 +17,6 @@ spring:
     port: ${sky.redis.port}
     database: ${sky.redis.database}
 
-
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
@@ -43,6 +42,13 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+    #加密秘钥
+    user-secret-key: adao
+    user-ttl: 7200000
+    user-token-name: authentication
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
 lu:
   fileupload:
     default-path: D:\\software\\nginx-1.20.2\\html\\sky\\img\\图片存储\\

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -117,4 +118,16 @@ public class DishServiceImpl implements DishService {
             dishFlavorMapper.deleteAllDishFlavor(ids.get(i));
         }
     }
+
+    public List<DishVO> listWithFlavor(Dish dish) {
+        //TODO 该
+        List<DishVO> result = dishMapper.list(dish);
+        for (DishVO d : result) {
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorMapper.selectByDishId(d.getId());
+            d.setFlavors(flavors);
+        }
+        return result;
+    }
+
 }

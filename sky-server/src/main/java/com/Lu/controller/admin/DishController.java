@@ -2,6 +2,7 @@ package com.Lu.controller.admin;
 
 import com.Lu.dto.DishDTO;
 import com.Lu.dto.DishPageQueryDTO;
+import com.Lu.entity.Dish;
 import com.Lu.result.PageResult;
 import com.Lu.result.Result;
 import com.Lu.service.DishService;
@@ -9,6 +10,7 @@ import com.Lu.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,14 +61,11 @@ public class DishController {
     @GetMapping("/list")
     @ApiOperation("按照分类id查询")
     public Result<List<DishVO>> list(DishDTO dishDTO){
-        DishPageQueryDTO dishPageQueryDTO=new DishPageQueryDTO();
-        dishPageQueryDTO.setCategoryId(Math.toIntExact(dishDTO.getCategoryId()));
-        dishPageQueryDTO.setPageSize(99999);
-        dishPageQueryDTO.setPage(1);
         try {
-            Result<PageResult> pageResult = page(dishPageQueryDTO);
-            PageResult data = pageResult.getData();
-            return Result.success(data.getRecords());
+            Dish dish = new Dish();
+            BeanUtils.copyProperties(dishDTO,dish);
+            List<DishVO> dishVOS = dishService.listWithFlavor(dish);
+            return Result.success(dishVOS);
         } catch (Exception e) {
             return Result.error("查询失败");
         }
